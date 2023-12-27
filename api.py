@@ -1,12 +1,11 @@
-import pathway as py 
-import os 
+import pathway as pw
 from dotenv import load_dotenv
 from common.embedder import index_embeddings,embeddings
 from common.prompt_gen import prompt
 from llm_app import chunk_texts, extract_texts
 load_dotenv()
 
-data_path="../data/"
+data_path="./data/"
 
 def run(host,port):
     #User gives a query
@@ -27,17 +26,17 @@ def run(host,port):
     #making input data into smaller documents
     documents=input_datasource.select(texts=extract_texts(pw.this.data))
     documents = documents.select(chunks=chunk_texts(pw.this.texts))
-    documents=documents.flatten((pw.this.chunks).rename_columns(chunk=pw.this.chunks))
+    documents=documents.flatten(pw.this.chunks).rename_columns(chunk=pw.this.chunks)
 
 
     #embedding the chunks
-    embed_data=embeddings(context=documents,data=pw.this.chunks)
+    embedded_data=embeddings(context=documents,data_to_embed=pw.this.chunk)
 
     #constructing index in realtime
-    index_data=index_embeddings(embedded_data=embed_data)
+    index_data=index_embeddings(embedded_data=embedded_data)
 
     #Generate embeding for user query
-    embedded_query=embeddings(context=query,data=pw.thi.query)
+    embedded_query=embeddings(context=query,data_to_embed=pw.this.query)
 
     responses=prompt(index_data,embedded_query,pw.this.query)
 
@@ -51,5 +50,5 @@ def run(host,port):
 
 
 
-class QueryInputSchema(pw.schema):
+class QueryInputSchema(pw.Schema):
     query: str

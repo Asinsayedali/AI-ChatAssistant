@@ -8,8 +8,8 @@ load_dotenv()
 embedding_dimension = int(os.environ.get("EMBEDDING_DIMENSION", 1536))
 
 
-def embeddings(context,data):
-    return context + context.select(vector=openai_embedder(data))
+def embeddings(context,data_to_embed):
+    return context + context.select(vector=openai_embedder(data_to_embed))
 
 
 def index_embeddings(embedded_data):
