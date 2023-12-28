@@ -9,23 +9,23 @@ api_host = os.environ.get("HOST", "api")
 api_port = int(os.environ.get("PORT", 8080))
 
 with st.sidebar:
-    st.markdown("## How to use this bot")
+    st.markdown("## AI chat assistant bot for Discord communities.\n")
+    st.markdown("This bot can answer to your questions regarding the discord community and help you to learn more about it.")
     st.markdown(
-        """Enter your question, be specific with your question\n"""
+        """ Just enter your question in the chat area.\n"""
     )
     st.markdown(
-        "Example: 'what are the benefits of this community(community name)'",
+        "Example: 'what is this community?'",
     )
     st.markdown(
-        """[View the source code on GitHub](
-https://github.com/pathwaycom/llm-app/examples/pipelines/drive_alert/app.py)""")
+        """[View the source code on GitHub](https://github.com/Asinsayedali/AI-ChatAssistant)""")
     
 
 
   
 
  #UI elements
-st.title("AI Chat assistant for Discord channels")
+st.title("AI Chat assistant for Discord Communities")
 prompt = st.chat_input("How can I help you?")
 # prompt = st.chat_input("How can I help you today?")
 # Initialize chat history

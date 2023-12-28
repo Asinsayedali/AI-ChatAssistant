@@ -2,10 +2,11 @@ import pathway as pw
 from dotenv import load_dotenv
 from common.embedder import index_embeddings,embeddings
 from common.prompt_gen import prompt
+import os
 from llm_app import chunk_texts, extract_texts
 load_dotenv()
 
-data_path="/home/vboxuser/AI-chat-app/Data"
+data_path=os.environ.get("LOCAL_PATH", "/usr/local/documents")
 
 def run(host,port):
     #User gives a query
