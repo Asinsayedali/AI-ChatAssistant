@@ -26,7 +26,7 @@ https://github.com/pathwaycom/llm-app/examples/pipelines/drive_alert/app.py)""")
 
  #UI elements
 st.title("AI Chat assistant for discord channels")
-prompt = st.text_input("How can I help you today?")
+prompt = st.chat_input("How can I help you today?")
 # prompt = st.chat_input("How can I help you today?")
 # Initialize chat history
 if "messages" not in st.session_state:
