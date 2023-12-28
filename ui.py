@@ -47,9 +47,7 @@ if prompt:
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    for message in st.session_state.messages:
-        if message["role"] == "user":
-            st.sidebar.text(f"📩 {message['content']}")
+    
 
     url = f"http://{api_host}:{api_port}/"
     data = {"query": prompt, "user": "user"}

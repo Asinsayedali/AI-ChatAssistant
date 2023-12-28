@@ -5,7 +5,7 @@ from common.prompt_gen import prompt
 from llm_app import chunk_texts, extract_texts
 load_dotenv()
 
-data_path="./data/"
+data_path="/home/vboxuser/AI-chat-app/Data"
 
 def run(host,port):
     #User gives a query
