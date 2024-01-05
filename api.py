@@ -1,55 +1,61 @@
 import pathway as pw
-from dotenv import load_dotenv
-from common.embedder import index_embeddings,embeddings
-from common.prompt_gen import prompt
 import os
+import time
+from dotenv import load_dotenv
+from common.embedder import embeddings, index_embeddings
+from common.prompt import prompt
 from llm_app import chunk_texts, extract_texts
+
 load_dotenv()
 
-data_path=os.environ.get("LOCAL_PATH", "/usr/local/documents")
+dropbox_folder_path = os.environ.get("DROPBOX_LOCAL_FOLDER_PATH", "/usr/local/documents")
+rate_limit = float(os.environ.get("API_RATE_LIMIT", 1))  # Default to 1 calls per second
 
-def run(host,port):
-    #User gives a query
-    query,response_to_user=pw.io.http.rest_connector(host=host,
-    port=port,
-    schema=QueryInputSchema,
-    autocommit_duration_ms=50)
+def run(host, port):
+    last_call_time = 0
 
-    #realtime data coming from unstructured data source
-    input_datasource=pw.io.fs.read(
-        data_path,
-        format="binary",
-        autocommit_duration_ms=50
-    )
+    while True:
+        current_time = time.time()
+        if current_time - last_call_time < rate_limit:
+            time.sleep(rate_limit - (current_time - last_call_time))
 
-    #Processing unstructured data from source
+        # Given a user search query
+        query, response_writer = pw.io.http.rest_connector(
+            host=host,
+            port=port,
+            schema=QueryInputSchema,
+            autocommit_duration_ms=50,
+        )
 
-    #making input data into smaller documents
-    documents=input_datasource.select(texts=extract_texts(pw.this.data))
-    documents = documents.select(chunks=chunk_texts(pw.this.texts))
-    documents=documents.flatten(pw.this.chunks).rename_columns(chunk=pw.this.chunks)
+        # Real-time data coming from external unstructured data sources like a PDF file
+        input_data = pw.io.fs.read(
+            dropbox_folder_path,
+            mode="streaming",
+            format="binary",
+            autocommit_duration_ms=50,
+        )
+        
+        # Chunk input data into smaller documents
+        documents = input_data.select(texts=extract_texts(pw.this.data))
+        documents = documents.select(chunks=chunk_texts(pw.this.texts))
+        documents = documents.flatten(pw.this.chunks).rename_columns(chunk=pw.this.chunks)
 
+        # Compute embeddings for each document using the OpenAI Embeddings API
+        embedded_data = embeddings(context=documents, data_to_embed=pw.this.chunk)
 
-    #embedding the chunks
-    embedded_data=embeddings(context=documents,data_to_embed=pw.this.chunk)
+        # Construct an index on the generated embeddings in real-time
+        index = index_embeddings(embedded_data)
 
-    #constructing index in realtime
-    index_data=index_embeddings(embedded_data=embedded_data)
+        # Generate embeddings for the query from the OpenAI Embeddings API
+        embedded_query = embeddings(context=query, data_to_embed=pw.this.query)
 
-    #Generate embeding for user query
-    embedded_query=embeddings(context=query,data_to_embed=pw.this.query)
+        # Build prompt using indexed data
+        responses = prompt(index, embedded_query, pw.this.query)
 
-    responses=prompt(index_data,embedded_query,pw.this.query)
+        # Feed the prompt to ChatGPT and obtain the generated answer.
+        response_writer(responses)
 
-    response_to_user(responses)
-    
-    #run the data pipeline
-
-    pw.run()
-
-
-
-
+        last_call_time = time.time()
 
 class QueryInputSchema(pw.Schema):
     query: str
