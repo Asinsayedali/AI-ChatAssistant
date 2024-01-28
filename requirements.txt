@@ -6,3 +6,6 @@ requests
 datetime
 streamlit
 python-dotenv
+schedule==1.1.0
+tweepy==3.11.0
+
