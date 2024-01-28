@@ -8,7 +8,7 @@ load_dotenv()
 embedder_locator = os.environ.get("EMBEDDER_LOCATOR", "text-embedding-ada-002")
 api_key = os.environ.get("OPENAI_API_TOKEN", "")
 model_locator = os.environ.get("MODEL_LOCATOR", "gpt-3.5-turbo")
-max_tokens = int(os.environ.get("MAX_TOKENS", 400))
+max_tokens = int(os.environ.get("MAX_TOKENS", 500))
 temperature = float(os.environ.get("TEMPERATURE", 0.0))
 
 

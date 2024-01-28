@@ -15,7 +15,7 @@ with st.sidebar:
         """ Just enter your question in the chat area.\n"""
     )
     st.markdown(
-        "Example: 'what is this community?'",
+        "Example: 'What are the benefits of joining this community?'",
     )
     st.markdown(
         """[View the source code on GitHub](https://github.com/Asinsayedali/AI-ChatAssistant)""")
@@ -25,7 +25,7 @@ with st.sidebar:
   
 
  #UI elements
-st.title("AI Chat assistant for Discord Communities")
+st.title("AI Chat Assistant for Discord Communities")
 prompt = st.chat_input("How can I help you?")
 # prompt = st.chat_input("How can I help you today?")
 # Initialize chat history
