@@ -102,7 +102,7 @@ You can run the UI by running Streamlit app:
 ```bash
 streamlit run ui.py
 ```
-It connects to the Pathway's backend API automatically and you will see the UI frontend running on your browser.
+It connects to the Pathway's backend API automatically and you will see the UI running on your browser at `localhost:8501`.
 
 NOTE:
 - To retrieve tweet data from the Twitter API, please note that, due to recent policy updates, access to tweets data now requires a Basic plan subscription. The free plan no longer provides the capability to fetch tweets data. Consider upgrading to the Basic plan for uninterrupted access to this feature.
