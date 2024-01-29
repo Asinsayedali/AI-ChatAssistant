@@ -6,4 +6,4 @@ Meet the AI Chat Assistant – your go-to Discord chat bot! 😎 Tired of handli
 
 # Demo
 How the tool works:
-[](https://github.com/Asinsayedali/AI-ChatAssistant/assets/85584914/663e9f48-2465-42f0-8975-5cd8e05fdd81)
+[AI-Chat-Assistant-Demo](https://github.com/Asinsayedali/AI-ChatAssistant/assets/85584914/663e9f48-2465-42f0-8975-5cd8e05fdd81)
